@@ -14,7 +14,12 @@ public class ImageTrackerManager : MonoBehaviour
     public const string NAME2 = "Marker2";
     public const int NUMBER_OF_MARKERS = 2;
 
-    public Vector3[] markerPos;
+    [SerializeField]
+    private Vector3[] markerPos;
+    [SerializeField]
+    private GameObject ModelHandler;
+    private Vector3 Orientation;
+    private Quaternion initialRot, currentRotation;
    
     //create the “trackable” manager to detect 2D images
     private ARTrackedImageManager arTrackedImageManager;
@@ -28,6 +33,28 @@ public class ImageTrackerManager : MonoBehaviour
     private void Start()
     {
         markerPos = new[] { new Vector3(), new Vector3() };
+        Orientation = Vector3.zero;
+        initialRot = transform.rotation;
+    }
+
+    private void Update()
+    {
+        /*Debug.Log(arTrackedImageManager.trackables.count);
+        Debug.Log(markerPos[0]);
+        Debug.Log(markerPos[1]);
+        Debug.Log("orientation: "+Orientation);*/
+    }
+
+    public void LateUpdate()
+    {
+        if(arTrackedImageManager.trackables.count == NUMBER_OF_MARKERS)
+        {
+            Orientation = markerPos[1] - markerPos[0];
+            //ModelHandler.transform.eulerAngles = Orientation;
+            currentRotation = Quaternion.LookRotation(Orientation.normalized);
+            //currentRotation *= initialRot;
+            ModelHandler.transform.rotation = currentRotation;
+        }
     }
 
 
@@ -52,13 +79,13 @@ public class ImageTrackerManager : MonoBehaviour
         // for each tracked image that has been added
         foreach (var addedImage in args.added)
         {
-            UpdatePos(addedImage.name, addedImage.transform.position);
+            UpdatePos(addedImage);
         }
 
         // for each tracked image that has been updated
         foreach (var updated in args.updated)
         {
-            UpdatePos(updated.name, updated.transform.position);
+            UpdatePos(updated);
         }
 
         // for each tracked image that has been removed  
@@ -68,15 +95,18 @@ public class ImageTrackerManager : MonoBehaviour
         }
     }
 
-    private void UpdatePos(string s, Vector3 pos)
+    private void UpdatePos(ARTrackedImage trackedImage)
     {
-        if (s == NAME1)
+        if (trackedImage.trackingState != TrackingState.Tracking) { return; }
+        //Debug.Log(trackedImage.referenceImage.name.ToString());
+        if (trackedImage.referenceImage.name.ToString() == NAME1)
         {
-            markerPos[1] = pos;
+            markerPos[0] = trackedImage.transform.position;
+            ModelHandler.transform.position = trackedImage.transform.position;
         }
-        if (s == NAME2)
+        if (trackedImage.referenceImage.name.ToString() == NAME2)
         {
-            markerPos[2] = pos;
+            markerPos[1] = trackedImage.transform.position;
         }
     }
 }
