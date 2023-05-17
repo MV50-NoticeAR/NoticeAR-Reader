@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 2330778886897871841}
   - component: {fileID: 2330778886897871842}
   - component: {fileID: 2330778886897871843}
+  - component: {fileID: 1473861716327657043}
   m_Layer: 5
   m_Name: NoticeButton
   m_TagString: Untagged
@@ -257,3 +258,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1473861716327657043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330778886897871845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc6e4e81d72e654c81e5584f6a553cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

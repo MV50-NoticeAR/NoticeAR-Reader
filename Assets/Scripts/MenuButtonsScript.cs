@@ -8,34 +8,42 @@ public class MenuButtonsScript : MonoBehaviour
     public int PageNumber;
 
     [SerializeField]
-    private string NOTICE_PLAYERPREF = "NoticeName";
-    [SerializeField]
     private Button[] Buttons;
     [SerializeField]
     private string[] NoticesFiles;
-    [SerializeField]
-    private string[] ButtonsFiles;
 
     private void Start()
     {
         PageNumber = 0;
         RefreshButtons();
-        ButtonsFiles = new string[Buttons.Length];
     }
 
-    public void SetNotice(string Value)
+    public void PageUp()
     {
-        PlayerPrefs.SetString(NOTICE_PLAYERPREF, Value);
+        ChangePage(1);
     }
+
+    public void PageDown()
+    {
+        ChangePage(-1);
+    }
+
+    private void ChangePage(int modif)
+    {
+        PageNumber += modif;
+        RefreshButtons();
+    }
+    
 
     private void RefreshButtons()
     {
-        for(int i = PageNumber*Buttons.Length;i< (PageNumber+1) * Buttons.Length-1; ++i)
+        for(int i = PageNumber*Buttons.Length;i< (PageNumber+1) * Buttons.Length; ++i)
         {
-            ButtonsFiles[i] = null;
+            ToAssembleButtonScript assembleScript = Buttons[i%Buttons.Length].GetComponent<ToAssembleButtonScript>();
+            assembleScript.ButtonFile = null;
             if (NoticesFiles.Length > i)
             {
-                ButtonsFiles[i] = NoticesFiles[i];
+                assembleScript.ButtonFile = NoticesFiles[i];
             }
         }
     }
