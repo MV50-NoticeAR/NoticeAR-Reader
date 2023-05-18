@@ -257,7 +257,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2330778886897871842}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1473861716327657043}
+        m_TargetAssemblyTypeName: ToAssembleButtonScript, Assembly-CSharp
+        m_MethodName: ChangeSceneToAR
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1473861716327657043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,3 +282,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc6e4e81d72e654c81e5584f6a553cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NOTICE_PLAYERPREF: NoticeName
+  AR_SCENE: MainScene
+  ButtonFile: 
