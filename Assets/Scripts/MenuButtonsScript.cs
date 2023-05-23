@@ -30,7 +30,7 @@ public class MenuButtonsScript : MonoBehaviour
 
     private void ChangePage(int modif)
     {
-        if ((NoticesFiles.Length % Buttons.Length!=0 && PageNumber < NoticesFiles.Length/Buttons.Length+1)||(PageNumber < NoticesFiles.Length / Buttons.Length))
+        if ((NoticesFiles.Length % Buttons.Length!=0 && PageNumber < NoticesFiles.Length/Buttons.Length)||(NoticesFiles.Length % Buttons.Length == 0 && PageNumber < NoticesFiles.Length / Buttons.Length-1))
         {
             PageNumber += modif;
             RefreshButtons();
