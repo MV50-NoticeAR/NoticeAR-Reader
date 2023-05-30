@@ -1,0 +1,29 @@
+{
+    "name": "Test schematic",
+    "picture": "test.png",
+    "description": "This is a test schematic.",
+    "version": 1.2,
+    "steps": [
+        {
+            "name": "cockpit",
+            "description": "On fé le cockpit",
+            "pieces": [
+                {
+                    "model": 1,
+                    "color": "FEFEFE",
+                    "position": {
+                        "x": 1,
+                        "y": 2,
+                        "z": 3
+                    },
+                    "rotation": {
+                        "x": 4,
+                        "y": 5,
+                        "z": 6,
+                        "w": 7
+                    }
+                }
+            ]
+        }
+    ]
+}
