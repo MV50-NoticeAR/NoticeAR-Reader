@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
     /// </sumary>
     private IEnumerator LoadImageFromFiles(Image image, string filename) 
     {
-        string path = Path.Combine("..", CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "pictures", filename);
+        string path = Path.Combine(CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "pictures", filename);
         if (!File.Exists(path)) throw new Exception($"Cannot find the file at {path}");
 
         using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture($"file:///{path}"))

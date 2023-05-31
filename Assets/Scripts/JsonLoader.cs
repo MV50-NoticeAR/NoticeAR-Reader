@@ -13,7 +13,7 @@ public static class JsonLoader
     /// </sumary>
     public static Schematic Load(string filename)
     {
-        string path = Path.Combine("..", CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "schematics", filename);
+        string path = Path.Combine(CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "schematics", filename);
         if (!File.Exists(path)) throw new Exception($"Cannot find the file at {path}");
 
         string dataAsJSON = File.ReadAllText(path);
@@ -25,7 +25,7 @@ public static class JsonLoader
     /// </sumary>
     public static List<Schematic> FetchAllSchematics()
     {
-        string path = Path.Combine("..", CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "schematics");
+        string path = Path.Combine(CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "schematics");
         if (!Directory.Exists(path)) throw new Exception($"Cannot find the schematics directory at {path}");
 
         string[] files = Directory.GetFiles(path, "*.json");
