@@ -2,24 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class ARButtonsScript : MonoBehaviour
 {
+    public int currentStep,maxSteps;
+
     [SerializeField]
-    private GameObject bricksButton, bricksList, stepCount, stepProgress;
+    private GameObject bricksButton, bricksList, stepDownButton, stepUpButton;
+    [SerializeField]
+    private TextMeshProUGUI stepCountText;
+    [SerializeField]
+    private Slider stepCountBar;
+    [SerializeField]
+    private string MENU_SCENE = "MenuScene";
     private bool brickListDisplay, stepProgressDisplay;
 
     private void Start()
     {
         brickListDisplay = true;
         stepProgressDisplay = true;
-        changeBrickListDisplay();
-        changeStepProgressDisplay();
+        ChangeBrickListDisplay();
+        stepCountBar.maxValue = maxSteps;
+        UpdateSteps();
     }
 
-    public void changeBrickListDisplay()
+    public void ChangeBrickListDisplay()
     {
-        Debug.Log("ok");
         brickListDisplay = !brickListDisplay;
         if (brickListDisplay)
         {
@@ -33,19 +43,41 @@ public class ARButtonsScript : MonoBehaviour
         }
     }
 
-    public void changeStepProgressDisplay()
+    public void UpdateSteps()
     {
-        stepProgressDisplay = !stepProgressDisplay;
-        if (stepProgressDisplay)
+        // step down button
+        if (currentStep == 0) this.stepDownButton.SetActive(false);
+        if (currentStep > 0) this.stepDownButton.SetActive(true);
+
+        // step up button
+        if (currentStep == maxSteps) this.stepUpButton.SetActive(false);
+        if (currentStep < maxSteps) this.stepUpButton.SetActive(true);
+
+        stepCountText.SetText("Etape "+currentStep+"/"+maxSteps);
+        stepCountBar.value = currentStep;
+    }
+
+    public void StepUp()
+    {
+        if (currentStep < maxSteps)
         {
-            stepProgress.SetActive(true);
-            stepCount.SetActive(false);
+            ++currentStep;
+            UpdateSteps();
         }
-        else
+    }
+
+    public void StepDown()
+    {
+        if (currentStep > 0)
         {
-            stepProgress.SetActive(false);
-            stepCount.SetActive(true);
+            --currentStep;
+            UpdateSteps();
         }
+    }
+
+    public void BackToMenu()
+    {
+        StartCoroutine(LoadSceneRoutine(MENU_SCENE));
     }
 
     IEnumerator LoadSceneRoutine(string sceneName)
