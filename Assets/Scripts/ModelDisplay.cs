@@ -27,7 +27,7 @@ public class ModelDisplay : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        UnityEngine.Debug.Log("Lancement de l'affichage");
+        if (CONSTANTS.DEBUG == true) UnityEngine.Debug.Log("Lancement de l'affichage");
 
         this.Display("3004", new Vector3(0, 0, 100), new Quaternion(0.7f, 0f, 0f, 0.7f), "#fff101");
     }
@@ -56,6 +56,6 @@ public class ModelDisplay : MonoBehaviour
         if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 
             piece.GetComponentInChildren<Renderer>().material.color = customColor;
 
-        UnityEngine.Debug.Log(customColor);
+        if (CONSTANTS.DEBUG == true) UnityEngine.Debug.Log(customColor);
     }
 }
