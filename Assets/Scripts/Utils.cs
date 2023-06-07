@@ -1,30 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <sumary>
+/// <summary>
 /// Constantes du projet
-/// </sumary>
+/// </summary>
 public struct CONSTANTS
 {
     public const bool DEBUG = true;
 }
 
-/// <sumary>
-/// Class permettant d'étendre d'autre classes en leur ajoutant des méthodes utiles
-/// </sumary>
+/// <summary>
+/// Class permettant d'etendre d'autre classes en leur ajoutant des methodes utiles
+/// </summary>
 public static class Mixin 
 {
-    /// <sumary>
-    /// Détruit tous les enfants d'un GameObject (à partir de son transform)
-    /// </sumary>
+    /// <summary>
+    /// Detruit tous les enfants d'un GameObject (a partir de son transform)
+    /// </summary>
     public static void ClearChildren(this Transform transform)
     {
         foreach (Transform child in transform) UnityEngine.Object.Destroy(child.gameObject);
     }
 
-    /// <sumary>
+    /// <summary>
     /// Convertie un Texture2D vers un Sprite
-    /// </sumary>
+    /// </summary>
     public static Sprite ToSprite(this Texture2D texture)
     {
         return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
