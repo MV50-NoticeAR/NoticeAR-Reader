@@ -35,17 +35,17 @@ public class ModelDisplay : MonoBehaviour
 
     void Display(string nomPiece, Vector3 pos, Quaternion rot, string hexColor)
     {
-        //Loading new piece
         piece = new OBJLoader().Load("C:/Users/gauth/Documents/GitHub/API/" + nomPiece + ".obj");
-        //Positioning the piece
+        // Loading new piece
+        // Positioning the piece
         piece.transform.position = pos;
-        //Rotating the piece
+        // Rotating the piece
         piece.transform.rotation = rot;
-        //Scaling the piece
+        // Scaling the piece
         piece.transform.localScale = new Vector3(scaling, scaling, scaling);
-        //Setting the AR controler as a parent
+        // Setting the AR controller as a parent
         piece.transform.parent = par.transform;
-        //Changing the color
+        // Changing the color
         Color customColor;
         if (ColorUtility.TryParseHtmlString(hexColor, out customColor))
             piece.GetComponentInChildren<Renderer>().material.color = customColor;

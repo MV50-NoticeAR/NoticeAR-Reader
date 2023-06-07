@@ -8,9 +8,9 @@ using UnityEngine;
 
 public static class JsonLoader
 {
-    /// <sumary>
+    /// <summary>
     /// Convert the given JSON path into a Schematic
-    /// </sumary>
+    /// </summary>
     public static Schematic Load(string filename)
     {
         string path = Path.Combine(CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "schematics", filename);
@@ -20,9 +20,9 @@ public static class JsonLoader
         return JsonConvert.DeserializeObject<Schematic>(dataAsJSON);
     }
 
-    /// <sumary>
+    /// <summary>
     /// Fetch all available JSON files and convert them into Schematics
-    /// </sumary>
+    /// </summary>
     public static List<Schematic> FetchAllSchematics()
     {
         string path = Path.Combine(CONSTANTS.DEBUG == true ? Application.streamingAssetsPath : Application.persistentDataPath, "schematics");
