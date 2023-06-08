@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -21,40 +18,40 @@ public class GameManager : MonoBehaviour
     public int maxSchematicsPerPage = 6;
 
     int __currentPage = 0;
-    public int currentPage
+    public int CurrentPage
     {
-        get => this.__currentPage;
+        get => __currentPage;
         private set 
         {
-            this.__currentPage = value;
-            if (CONSTANTS.DEBUG) Debug.Log($"Current page {this.currentPage}");
+            __currentPage = value;
+            if (CONSTANTS.DEBUG) Debug.Log($"Current page {CurrentPage}");
 
             // Fleche gauche
-            if (value == 0) this.leftButton.SetActive(false);
-            if (value == 1) this.leftButton.SetActive(true);
+            if (value == 0) leftButton.SetActive(false);
+            if (value == 1) leftButton.SetActive(true);
 
             // Fleche droite
-            if (this.currentPage == this.schemas.Count / maxSchematicsPerPage) this.rightButton.SetActive(false);
-            if (this.currentPage == (this.schemas.Count / maxSchematicsPerPage) - 1) this.rightButton.SetActive(true);
+            if (CurrentPage == schemas.Count / maxSchematicsPerPage) rightButton.SetActive(false);
+            if (CurrentPage == (schemas.Count / maxSchematicsPerPage) - 1) rightButton.SetActive(true);
 
             // On actualise le display
-            this.ShowSchemasInGUI();
+            ShowSchemasInGUI();
         }
     }
 
-    public void PageUp() => this.currentPage++;
-    public void PageDown() => this.currentPage--;
+    public void PageUp() => CurrentPage++;
+    public void PageDown() => CurrentPage--;
 
     void Start()
     {
         // On check qu'on a bien tous les elements necessaires associes via Unity
-        if (this.verticalLayout == null) throw new Exception("The layout has not been associated into the script !");
-        if (this.noticeButtonPrefab == null) throw new Exception("Button prefab has not been associated into the script !");
-        if (this.leftButton == null) throw new Exception("The left arrow has not been associated into the script !");
-        if (this.rightButton == null) throw new Exception("The right arrow has not been associated into the script !");
+        if (verticalLayout == null) throw new Exception("The layout has not been associated into the script !");
+        if (noticeButtonPrefab == null) throw new Exception("Button prefab has not been associated into the script !");
+        if (leftButton == null) throw new Exception("The left arrow has not been associated into the script !");
+        if (rightButton == null) throw new Exception("The right arrow has not been associated into the script !");
 
         // On cache la fleche gauche sur la premiere page
-        this.leftButton.SetActive(false);
+        leftButton.SetActive(false);
     }
 
     void Awake()
@@ -65,11 +62,11 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         // On recupere toutes les notices du dossier
-        this.schemas = JsonLoader.FetchAllSchematics();
-        if (CONSTANTS.DEBUG == true) Debug.Log($"All schemas loaded ! {this.schemas.Count} schemas loaded");
+        schemas = JsonLoader.FetchAllSchematics();
+        if (CONSTANTS.DEBUG == true) Debug.Log($"All schemas loaded ! {schemas.Count} schemas loaded");
 
         // On actualise le display
-        this.ShowSchemasInGUI();
+        ShowSchemasInGUI();
     }
 
     /// <sumary>
@@ -79,7 +76,7 @@ public class GameManager : MonoBehaviour
     void ShowSchemasInGUI()
     {
         // On enleve l'affichage precedent
-        this.verticalLayout.transform.ClearChildren();
+        verticalLayout.transform.ClearChildren();
 
         // On cree deux nouvelles lignes
         List<GameObject> rows = new() {
@@ -91,13 +88,13 @@ public class GameManager : MonoBehaviour
         float sign = 1f;
         foreach (GameObject row in rows)
         {
-            row.transform.SetParent(this.verticalLayout.transform);
+            row.transform.SetParent(verticalLayout.transform);
             row.transform.localPosition = new Vector3(-330f, 165f * sign, 0f);
             row.transform.localScale = new Vector3(1f, 1f, 1f);
             sign = sign == 1f ? -1f : 1f;
         }
 
-        if (CONSTANTS.DEBUG) Debug.Log($"{this.currentPage}, {this.maxSchematicsPerPage}");
+        if (CONSTANTS.DEBUG) Debug.Log($"{CurrentPage}, {maxSchematicsPerPage}");
 
         int c = 0;          // colone en cours
         int r = 0;          // ligne en cours
@@ -106,8 +103,8 @@ public class GameManager : MonoBehaviour
         // On affiche les notices concernees
         // => En fonction de la page sur laquelle on est
         for (
-            int i = this.currentPage * this.maxSchematicsPerPage;
-            i < this.schemas.Count && processed < maxSchematicsPerPage;
+            int i = CurrentPage * maxSchematicsPerPage;
+            i < schemas.Count && processed < maxSchematicsPerPage;
             i++
         )
         {
@@ -119,7 +116,7 @@ public class GameManager : MonoBehaviour
             }
 
             if (CONSTANTS.DEBUG) Debug.Log($"{i}, {c}, {r}");
-            Schematic schema = this.schemas[i];
+            Schematic schema = schemas[i];
 
             // On cree le bouton associe a la notice
             GameObject button = Instantiate(noticeButtonPrefab, rows[r].transform);
