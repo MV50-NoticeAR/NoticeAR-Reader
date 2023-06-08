@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using UnityEngine;
-
 using Dummiesman;
 
 public class ModelDisplay : MonoBehaviour
@@ -12,8 +7,6 @@ public class ModelDisplay : MonoBehaviour
     public Camera camTest;
 
     public GameObject par;
-    public GameObject piece;
-
     public float scaling;
 
     // Start is called before the first frame update
@@ -27,9 +20,9 @@ public class ModelDisplay : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        if (CONSTANTS.DEBUG == true) UnityEngine.Debug.Log("Lancement de l'affichage");
+        if (CONSTANTS.DEBUG == true) Debug.Log("Lancement de l'affichage");
 
-        this.Display("3004", new Vector3(0, 0, 100), new Quaternion(0.7f, 0f, 0f, 0.7f), "#fff101");
+        Display("3004", new Vector3(0, 0, 100), new Quaternion(0.7f, 0f, 0f, 0.7f), "#fff101");
     }
 
     /// <summary>
@@ -42,9 +35,7 @@ public class ModelDisplay : MonoBehaviour
     void Display(string name, Vector3 pos, Quaternion rot, string hexColor)
     {
         // Loading new piece
-        piece = new OBJLoader().Load(@$"Assets/Resources/Bricks/{name}.obj");
-        piece.transform.position = pos;
-        piece.transform.rotation = rot;
+        GameObject piece = Instantiate(Resources.Load<GameObject>(@$"Bricks/{name}"), pos, rot);
         
         // Scaling the piece
         piece.transform.localScale = new Vector3(scaling, scaling, scaling);
@@ -56,6 +47,6 @@ public class ModelDisplay : MonoBehaviour
         if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 
             piece.GetComponentInChildren<Renderer>().material.color = customColor;
 
-        if (CONSTANTS.DEBUG == true) UnityEngine.Debug.Log(customColor);
+        if (CONSTANTS.DEBUG == true) Debug.Log(customColor);
     }
 }
