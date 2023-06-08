@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
 
             // On update l'image du bouton (en fonction de celle parametree dans le JSON)
             Image imageComp = button.transform.Find("Image").GetComponent<Image>();
-            imageComp.sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture.Replace(".png", "")}");
+            imageComp.sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture}");
 
             c++;
             processed++;
