@@ -132,32 +132,10 @@ public class GameManager : MonoBehaviour
 
             // On update l'image du bouton (en fonction de celle parametree dans le JSON)
             Image imageComp = button.transform.Find("Image").GetComponent<Image>();
-            StartCoroutine(LoadImageFromFiles(imageComp, schema.picture));
+            imageComp.sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture.Replace(".png", "")}");
 
             c++;
             processed++;
-        }
-    }
-
-    /// <sumary>
-    /// Telecharge un fichier statique vers un Sprite d'une Image
-    /// </sumary>
-    private IEnumerator LoadImageFromFiles(Image image, string filename) 
-    {
-        string path = @$"Assets/Resources/Pictures/{filename}";
-        if (!File.Exists(path)) path = $@"Assets/Resources/Pictures/empty.png"; // Fallback quand l'image est introuvable
-
-        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture($"file:///{path}"))
-        {
-            yield return uwr.SendWebRequest();
-
-            if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError) throw new Exception(uwr.error);
-            else
-            {
-                // Get downloaded asset bundle
-                var texture = DownloadHandlerTexture.GetContent(uwr);
-                image.sprite = texture.ToSprite();
-            }
         }
     }
 }
