@@ -8,6 +8,8 @@ public class ModelDisplay : MonoBehaviour
     public GameObject par;
     public float scaling;
 
+    public Material transparentMat; // used for flashing
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,11 +43,19 @@ public class ModelDisplay : MonoBehaviour
         
         // Setting the AR controller as a parent
         piece.transform.parent = par.transform;
-        
+
+        //change the material transparent for flashing 
+        piece.GetComponentInChildren<Renderer>().material = transparentMat;
+
         // Changing the color
         if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 
             piece.GetComponentInChildren<Renderer>().material.color = customColor;
 
         if (CONSTANTS.DEBUG == true) Debug.Log(customColor);
+    }
+
+    private void AddFlashingScript(GameObject piece)
+    {
+        piece.AddComponent<FlashingMaterialScript>();
     }
 }

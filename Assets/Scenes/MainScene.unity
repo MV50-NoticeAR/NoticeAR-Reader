@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2095,8 +2095,8 @@ MonoBehaviour:
   camAR: {fileID: 22732920}
   camTest: {fileID: 1897221447}
   par: {fileID: 1912184486}
-  piece: {fileID: 0}
   scaling: 1
+  transparentMat: {fileID: 2100000, guid: 52619f1095c551d4d97a1894d83ec3d0, type: 2}
 --- !u!1 &1707975697
 GameObject:
   m_ObjectHideFlags: 0
