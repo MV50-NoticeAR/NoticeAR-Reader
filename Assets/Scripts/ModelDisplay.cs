@@ -13,7 +13,8 @@ public class ModelDisplay : MonoBehaviour
     public Material baseMat;
 
     private Schematic schema;
-    private List<GameObject> currentPieces = new();
+    private Dictionary<int, List<GameObject>> piecesPerSteps = new();
+    
     private int numberOfBricks = 0;
 
     private int __stepMax = 0;
@@ -29,28 +30,52 @@ public class ModelDisplay : MonoBehaviour
         get => __step;
         set
         {
+            if (value < 1) return;
             if (value > StepMax) return;
-            __step = value;
 
+            bool decreasing = value < __step;
+
+            __step = value;
             Step schematicStep = schema.steps[Step - 1];
-            
-            if (currentPieces.Count > 0)
+
+            // On retourne en arriere
+            if (decreasing)
             {
-                // On enleve l'effet clignotant sur les pieces de l'etape d'avant
-                foreach (GameObject piece in currentPieces)
+                if (value + 1 <= StepMax)
                 {
-                    RemoveFlashingScript(piece);
+                    foreach (GameObject piece in piecesPerSteps[value + 1])
+                    {
+                        Destroy(piece);
+                    }
                 }
 
-                // On reset la liste des pieces en cours
-                currentPieces = new();
+                foreach (GameObject piece in piecesPerSteps[value])
+                {
+                    AddFlashingScript(piece);
+                }
             }
 
-            foreach (Piece piece in schematicStep.pieces)
+            // On incremente le nombre d'etape de 1
+            else 
             {
-                GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
-                AddFlashingScript(output);
-                currentPieces.Add(output);
+                foreach (Piece piece in schematicStep.pieces)
+                {
+                    GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
+
+                    AddFlashingScript(output);
+
+                    if (!piecesPerSteps.ContainsKey(value)) piecesPerSteps.Add(value, new List<GameObject>());
+                    piecesPerSteps[value].Add(output);
+                }
+
+                // Si y'avait des pieces avant on enleve le flashing
+                if (value - 1 > 0)
+                {
+                    foreach (GameObject piece in piecesPerSteps[value - 1])
+                    {
+                        RemoveFlashingScript(piece);
+                    }
+                }
             }
         }
     }
@@ -69,8 +94,6 @@ public class ModelDisplay : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        if (CONSTANTS.DEBUG == true) Debug.Log("Lancement de l'affichage");
-
         schema = JsonLoader.FetchSchematic("final.json");
         StepMax = schema.steps.Count;
 
@@ -78,9 +101,6 @@ public class ModelDisplay : MonoBehaviour
         {
             numberOfBricks += schema.steps[i].pieces.Count;
         }
-
-        Debug.Log($"Number of steps : {StepMax}");
-        Debug.Log($"Number of pieces : {numberOfBricks}");
 
         NextStep();
     }
@@ -95,7 +115,8 @@ public class ModelDisplay : MonoBehaviour
     private GameObject Display(string name, Vector3 pos, Quaternion rot, string hexColor)
     {
         // Loading new piece
-        GameObject piece = Instantiate(Resources.Load<GameObject>(@$"Bricks/{name}"), pos, rot);
+        GameObject resource = Resources.Load<GameObject>(@$"Bricks/{name}");
+        GameObject piece = Instantiate(resource, pos, rot);
         
         // Scaling the piece
         piece.transform.localScale = new Vector3(scaling, scaling, scaling);
