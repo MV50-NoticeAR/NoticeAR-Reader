@@ -56,7 +56,7 @@ public class ARButtonsScript : MonoBehaviour
         if (currentStep == maxStep) stepUpButton.SetActive(false);
         if (currentStep < maxStep) stepUpButton.SetActive(true);
 
-        stepCountText.SetText($"Étape {currentStep}/{maxStep}");
+        stepCountText.SetText($"Etape {currentStep}/{maxStep}");
         stepCountBar.value = currentStep;
     }
 
