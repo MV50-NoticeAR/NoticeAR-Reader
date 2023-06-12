@@ -45,7 +45,7 @@ public class ModelDisplay : MonoBehaviour
                 {
                     foreach (GameObject piece in piecesPerSteps[value + 1])
                     {
-                        Destroy(piece);
+                        piece.SetActive(false); // TODO: should be properly deleted instead of just hidden
                     }
                 }
 
@@ -61,6 +61,7 @@ public class ModelDisplay : MonoBehaviour
                 foreach (Piece piece in schematicStep.pieces)
                 {
                     GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
+                    if (output == null) continue;
 
                     AddFlashingScript(output);
 
@@ -116,13 +117,17 @@ public class ModelDisplay : MonoBehaviour
     {
         // Loading new piece
         GameObject resource = Resources.Load<GameObject>(@$"Bricks/{name}");
-        GameObject piece = Instantiate(resource, pos, rot);
+        GameObject piece;
+
+        try {
+            piece = Instantiate(resource, pos, rot, par.transform);
+        } catch {
+            Debug.Log($"Piece {name} not found");
+            return null;
+        }
         
         // Scaling the piece
         piece.transform.localScale = new Vector3(scaling, scaling, scaling);
-        
-        // Setting the AR controller as a parent
-        piece.transform.parent = par.transform;
 
         // Changing the color
         if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 

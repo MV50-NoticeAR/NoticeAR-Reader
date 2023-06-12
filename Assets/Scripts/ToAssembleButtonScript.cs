@@ -15,7 +15,6 @@ public class ToAssembleButtonScript : MonoBehaviour
     {
         if (ButtonFile != null)
         {
-            Debug.Log($"Changement de scene vers {ButtonFile}");
             SetNotice(ButtonFile);
             StartCoroutine(LoadSceneRoutine(AR_SCENE));
         }
