@@ -1,7 +1,4 @@
 using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,9 +15,20 @@ public static class JsonLoader
 
         foreach (TextAsset jsonFile in jsonFiles)
         {
-            schematics.Add(JsonConvert.DeserializeObject<Schematic>(jsonFile.text));
+            Schematic tmp = JsonConvert.DeserializeObject<Schematic>(jsonFile.text);
+            tmp.filename = jsonFile.name;
+            schematics.Add(tmp);
         }
 
         return schematics;
+    }
+
+    public static Schematic FetchSchematic(string filename)
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>($@"Schematics/{filename.Replace(".json", "")}");
+        Schematic tmp = JsonConvert.DeserializeObject<Schematic>(jsonFile.text);
+        tmp.filename = filename;
+
+        return tmp;
     }
 }

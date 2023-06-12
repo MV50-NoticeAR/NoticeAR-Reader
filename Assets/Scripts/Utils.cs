@@ -26,6 +26,7 @@ public static class Mixin
 public struct Schematic
 {
     public string name;
+    public string filename;
     public string description;
     public string picture;
     public string author;
@@ -42,7 +43,7 @@ public struct Step
 
 public struct Piece
 {
-    public int model;
+    public string model;
     public string color;
     public Vector3 position;
     public Quaternion rotation;

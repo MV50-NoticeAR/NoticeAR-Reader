@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ModelDisplay : MonoBehaviour
 {
@@ -9,6 +10,52 @@ public class ModelDisplay : MonoBehaviour
     public float scaling;
 
     public Material transparentMat; // used for flashing
+
+    private Schematic schema;
+    private List<GameObject> currentPieces = new();
+    private int numberOfBricks = 0;
+
+    private int __stepMax = 0;
+    public int StepMax
+    {
+        private set => __stepMax = value;
+        get => __stepMax;
+    }
+
+    private int __step = 0;
+    public int Step
+    {
+        get => __step;
+        set
+        {
+            if (value > StepMax) return;
+            __step = value;
+
+            Step schematicStep = schema.steps[Step - 1];
+            
+            if (currentPieces.Count > 0)
+            {
+                // On enlève l'effet clignotant sur les pièces de l'étape d'avant
+                foreach (GameObject piece in currentPieces)
+                {
+                    RemoveFlashingScript(piece);
+                }
+
+                // On reset la liste des pièces en cours
+                currentPieces = new();
+            }
+
+            foreach (Piece piece in schematicStep.pieces)
+            {
+                GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
+                AddFlashingScript(output);
+                currentPieces.Add(output);
+            }
+        }
+    }
+
+    public void NextStep() => Step++;
+    public void PrevStep() => Step--;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +70,20 @@ public class ModelDisplay : MonoBehaviour
 
         if (CONSTANTS.DEBUG == true) Debug.Log("Lancement de l'affichage");
 
-        Display("3004", new Vector3(0, 0, 100), new Quaternion(0.7f, 0f, 0f, 0.7f), "#fff101");
+        // Display("3004", new Vector3(0, 0, 100), new Quaternion(0.7f, 0f, 0f, 0.7f), "#fff101");
+
+        schema = JsonLoader.FetchSchematic("final.json");
+        StepMax = schema.steps.Count;
+
+        for (int i = 0; i < StepMax; i++)
+        {
+            numberOfBricks += schema.steps[i].pieces.Count;
+        }
+
+        Debug.Log($"Number of steps : {StepMax}");
+        Debug.Log($"Number of pieces : {numberOfBricks}");
+
+        NextStep();
     }
 
     /// <summary>
@@ -33,7 +93,7 @@ public class ModelDisplay : MonoBehaviour
     /// <param name="pos">Position de la piece dans la scene</param>
     /// <param name="rot">Rotation de la piece dans la scene</param>
     /// <param name="hexColor">Couleur de la piece</param>
-    void Display(string name, Vector3 pos, Quaternion rot, string hexColor)
+    private GameObject Display(string name, Vector3 pos, Quaternion rot, string hexColor)
     {
         // Loading new piece
         GameObject piece = Instantiate(Resources.Load<GameObject>(@$"Bricks/{name}"), pos, rot);
@@ -51,11 +111,17 @@ public class ModelDisplay : MonoBehaviour
         if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 
             piece.GetComponentInChildren<Renderer>().material.color = customColor;
 
-        if (CONSTANTS.DEBUG == true) Debug.Log(customColor);
+        return piece;
     }
 
     private void AddFlashingScript(GameObject piece)
     {
         piece.AddComponent<FlashingMaterialScript>();
+    }
+
+    private void RemoveFlashingScript(GameObject piece)
+    {
+        var comp = piece.GetComponent<FlashingMaterialScript>();
+        Destroy(comp);
     }
 }

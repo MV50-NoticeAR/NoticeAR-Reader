@@ -8,19 +8,15 @@ public class BackToARScript : MonoBehaviour
     [SerializeField]
     private GameObject layout;
     [SerializeField]
-    private string NOTICE_PLAYERPREF = "NoticeName";
+    private string NOTICE_PLAYERPREF = null;
     [SerializeField]
     private string AR_SCENE = "MainScene";
 
     public void BackToAR()
     {
-        //already went to the AR scene
-        if (PlayerPrefs.HasKey(NOTICE_PLAYERPREF))
-        {
-            this.ChangeSceneToAR();
-        }
+        // already went to the AR scene else select a default notice
+        if (PlayerPrefs.HasKey(NOTICE_PLAYERPREF)) ChangeSceneToAR();
         else
-        //selects a default notice
         {
             ToAssembleButtonScript script = layout.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ToAssembleButtonScript>();
             if (script != null)

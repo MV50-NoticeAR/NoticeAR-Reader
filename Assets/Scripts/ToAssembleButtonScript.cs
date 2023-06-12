@@ -13,16 +13,17 @@ public class ToAssembleButtonScript : MonoBehaviour
 
     public void ChangeSceneToAR()
     {
-        if (ButtonFile!=null)
+        if (ButtonFile != null)
         {
+            Debug.Log($"Changement de scene vers {ButtonFile}");
             SetNotice(ButtonFile);
             StartCoroutine(LoadSceneRoutine(AR_SCENE));
         }
     }
 
-    private void SetNotice(string Value)
+    private void SetNotice(string value)
     {
-        PlayerPrefs.SetString(NOTICE_PLAYERPREF, Value);
+        PlayerPrefs.SetString(NOTICE_PLAYERPREF, value);
     }
 
     IEnumerator LoadSceneRoutine(string sceneName)

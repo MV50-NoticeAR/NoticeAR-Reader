@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             sign = sign == 1f ? -1f : 1f;
         }
 
-        if (CONSTANTS.DEBUG) Debug.Log($"{CurrentPage}, {maxSchematicsPerPage}");
+        // if (CONSTANTS.DEBUG) Debug.Log($"{CurrentPage}, {maxSchematicsPerPage}");
 
         int c = 0;          // colone en cours
         int r = 0;          // ligne en cours
@@ -115,14 +115,17 @@ public class GameManager : MonoBehaviour
                 c = 0;
             }
 
-            if (CONSTANTS.DEBUG) Debug.Log($"{i}, {c}, {r}");
+            // if (CONSTANTS.DEBUG) Debug.Log($"{i}, {c}, {r}");
             Schematic schema = schemas[i];
 
             // On cree le bouton associe a la notice
             GameObject button = Instantiate(noticeButtonPrefab, rows[r].transform);
             button.name = $"{schema.name} schematic button";
             button.transform.localPosition = new Vector3(c * 330f, 0f, 0f);
-            
+
+            ToAssembleButtonScript script = button.GetComponent<ToAssembleButtonScript>();
+            script.ButtonFile = schema.filename;
+
             // On modifie le texte du bouton
             TextMeshProUGUI textMesh = button.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             textMesh.text = $" {schema.name} (v{schema.version})\n🧩 {schema.description}\n👤 {schema.author}";

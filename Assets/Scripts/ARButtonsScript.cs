@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class ARButtonsScript : MonoBehaviour
 {
-    public int currentStep,maxSteps;
-
     [SerializeField]
     private GameObject bricksButton, bricksList, stepDownButton, stepUpButton;
     [SerializeField]
@@ -16,6 +14,9 @@ public class ARButtonsScript : MonoBehaviour
     private Slider stepCountBar;
     [SerializeField]
     private string MENU_SCENE = "MenuScene";
+
+    public GameObject DisplayModel;
+
     private bool brickListDisplay, stepProgressDisplay;
 
     private void Start()
@@ -23,7 +24,7 @@ public class ARButtonsScript : MonoBehaviour
         brickListDisplay = true;
         stepProgressDisplay = true;
         ChangeBrickListDisplay();
-        stepCountBar.maxValue = maxSteps;
+        stepCountBar.maxValue = DisplayModel.GetComponent<ModelDisplay>().StepMax;
         UpdateSteps();
     }
 
@@ -44,34 +45,31 @@ public class ARButtonsScript : MonoBehaviour
 
     public void UpdateSteps()
     {
+        int currentStep = DisplayModel.GetComponent<ModelDisplay>().Step;
+        int maxStep = DisplayModel.GetComponent<ModelDisplay>().StepMax;
+
         // step down button
-        if (currentStep == 0) this.stepDownButton.SetActive(false);
-        if (currentStep > 0) this.stepDownButton.SetActive(true);
+        if (currentStep == 0) stepDownButton.SetActive(false);
+        if (currentStep > 0) stepDownButton.SetActive(true);
 
         // step up button
-        if (currentStep == maxSteps) this.stepUpButton.SetActive(false);
-        if (currentStep < maxSteps) this.stepUpButton.SetActive(true);
+        if (currentStep == maxStep) stepUpButton.SetActive(false);
+        if (currentStep < maxStep) stepUpButton.SetActive(true);
 
-        stepCountText.SetText("Etape "+currentStep+"/"+maxSteps);
+        stepCountText.SetText($"Étape {currentStep}/{maxStep}");
         stepCountBar.value = currentStep;
     }
 
     public void StepUp()
     {
-        if (currentStep < maxSteps)
-        {
-            ++currentStep;
-            UpdateSteps();
-        }
+        DisplayModel.GetComponent<ModelDisplay>().NextStep();
+        UpdateSteps();
     }
 
     public void StepDown()
     {
-        if (currentStep > 0)
-        {
-            --currentStep;
-            UpdateSteps();
-        }
+        DisplayModel.GetComponent<ModelDisplay>().PrevStep();
+        UpdateSteps();
     }
 
     public void BackToMenu()
