@@ -5,11 +5,14 @@ using UnityEngine;
 public class FlashingMaterialScript : MonoBehaviour
 {
     public float fadeSpeed = 0.5f;
+    private bool increasing;
+    
     [SerializeField]
     private MeshRenderer _renderer;
+
     [SerializeField]
     private Color color;
-    private bool increasing;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +34,7 @@ public class FlashingMaterialScript : MonoBehaviour
             color.a -= Time.deltaTime * fadeSpeed;
         }
         _renderer.material.color = color;
+
         if (color.a <= 0) increasing = true;
         if (color.a >= 1) increasing = false;
     }

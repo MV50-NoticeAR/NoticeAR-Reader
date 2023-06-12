@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -941,8 +941,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ed8311b0e2734479855169a7d8d3ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStep: 0
-  maxSteps: 5
   bricksButton: {fileID: 1506293479}
   bricksList: {fileID: 1613838545}
   stepDownButton: {fileID: 1110488353}
@@ -2098,6 +2096,7 @@ MonoBehaviour:
   par: {fileID: 1912184486}
   scaling: 1
   transparentMat: {fileID: 2100000, guid: 52619f1095c551d4d97a1894d83ec3d0, type: 2}
+  baseMat: {fileID: 2100000, guid: a06fa190d690e4685af3708d966e0618, type: 2}
 --- !u!1 &1707975697
 GameObject:
   m_ObjectHideFlags: 0

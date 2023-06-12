@@ -9,7 +9,8 @@ public class ModelDisplay : MonoBehaviour
     public GameObject par;
     public float scaling;
 
-    public Material transparentMat; // used for flashing
+    public Material transparentMat;
+    public Material baseMat;
 
     private Schematic schema;
     private List<GameObject> currentPieces = new();
@@ -35,13 +36,13 @@ public class ModelDisplay : MonoBehaviour
             
             if (currentPieces.Count > 0)
             {
-                // On enlève l'effet clignotant sur les pièces de l'étape d'avant
+                // On enleve l'effet clignotant sur les pieces de l'etape d'avant
                 foreach (GameObject piece in currentPieces)
                 {
                     RemoveFlashingScript(piece);
                 }
 
-                // On reset la liste des pièces en cours
+                // On reset la liste des pieces en cours
                 currentPieces = new();
             }
 
@@ -69,8 +70,6 @@ public class ModelDisplay : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         if (CONSTANTS.DEBUG == true) Debug.Log("Lancement de l'affichage");
-
-        // Display("3004", new Vector3(0, 0, 100), new Quaternion(0.7f, 0f, 0f, 0.7f), "#fff101");
 
         schema = JsonLoader.FetchSchematic("final.json");
         StepMax = schema.steps.Count;
@@ -104,9 +103,6 @@ public class ModelDisplay : MonoBehaviour
         // Setting the AR controller as a parent
         piece.transform.parent = par.transform;
 
-        //change the material transparent for flashing 
-        piece.GetComponentInChildren<Renderer>().material = transparentMat;
-
         // Changing the color
         if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 
             piece.GetComponentInChildren<Renderer>().material.color = customColor;
@@ -116,12 +112,14 @@ public class ModelDisplay : MonoBehaviour
 
     private void AddFlashingScript(GameObject piece)
     {
+        // change the material transparent for flashing 
+        piece.GetComponentInChildren<Renderer>().material = transparentMat;
         piece.AddComponent<FlashingMaterialScript>();
     }
 
     private void RemoveFlashingScript(GameObject piece)
     {
-        var comp = piece.GetComponent<FlashingMaterialScript>();
-        Destroy(comp);
+        piece.GetComponent<FlashingMaterialScript>().RemoveScript();
+        piece.GetComponentInChildren<Renderer>().material = baseMat;
     }
 }
