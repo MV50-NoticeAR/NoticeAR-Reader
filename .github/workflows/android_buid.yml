@@ -16,13 +16,12 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: actions/cache@v2
+      - name: Restore cached Primes
+        id: cache-primes-restore
+        uses: actions/cache/restore@v3
         with:
           path: ./Library
           key: Library-NoticeAR-Reader-Android
-          restore-keys: |
-            Library-NoticeAR-Reader-
-            Library-
 
       - name: Set up Unity and build
         uses: game-ci/unity-builder@v2
@@ -34,6 +33,13 @@ jobs:
           targetPlatform: Android
           buildsPath: Builds
           buildName: Android
+
+      - name: Save Primes
+        id: cache-primes-save
+        uses: actions/cache/save@v3
+        with:
+          path: ./Library
+          key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
 
       - name: Zip Android Build
         run: |
