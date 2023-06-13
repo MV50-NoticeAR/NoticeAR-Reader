@@ -45,16 +45,17 @@ public class ARButtonsScript : MonoBehaviour
         Dictionary<string, int> numberOfEachBricks = DisplayModel.GetComponent<ModelDisplay>().GetNumberOfEachBricks();
         int step = 0;
 
+        Camera renderCamera = new GameObject("RenderCamera").AddComponent<Camera>();
+
         foreach (KeyValuePair<string, int> kvp in numberOfEachBricks) 
         {
             float scaling = 50f;
             GameObject brick = Instantiate(Resources.Load<GameObject>(@$"Bricks/{kvp.Key}"), transform);
             brick.transform.localPosition = Vector3.zero;
             brick.transform.localScale = new Vector3(scaling, scaling, scaling);
-            brick.transform.localRotation = Quaternion.Euler(-30, -30, 0);
+            brick.transform.localRotation = Quaternion.Euler(-33.33f, 33.33f, 0);
 
-            // Cree une camera pour le rendu des briques
-            Camera renderCamera = new GameObject("RenderCamera").AddComponent<Camera>();
+            // Modifie la camera pour le rendu des briques
             renderCamera.transform.position = brick.transform.position - Vector3.forward * 3f;
             renderCamera.orthographic = true;
             renderCamera.orthographicSize = 3f;
@@ -87,10 +88,11 @@ public class ARButtonsScript : MonoBehaviour
             imageComp.sprite = previewSprite;
 
             Destroy(renderTexture);
-            Destroy(renderCamera);
             brick.SetActive(false);
             Destroy(brick);
         }
+
+        Destroy(renderCamera.gameObject);
     }
 
     public void UpdateSteps()
