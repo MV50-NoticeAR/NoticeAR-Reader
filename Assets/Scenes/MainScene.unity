@@ -946,6 +946,7 @@ MonoBehaviour:
   stepDownButton: {fileID: 1110488353}
   stepUpButton: {fileID: 2088236716}
   scrollContainer: {fileID: 1588120623}
+  scrollRect: {fileID: 1975689351}
   stepCountText: {fileID: 1334832842}
   stepCountBar: {fileID: 730549658}
   MENU_SCENE: MenuScene
@@ -2007,16 +2008,16 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
+    m_Top: 100
+    m_Bottom: 100
+  m_ChildAlignment: 1
+  m_Spacing: 200
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 1
+  m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
 --- !u!222 &1588120625
 CanvasRenderer:
@@ -2043,7 +2044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.0000032276068, y: -155.18916}
+  m_AnchoredPosition: {x: 0.0000032276068, y: -155.18999}
   m_SizeDelta: {x: 201.68, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1588120627

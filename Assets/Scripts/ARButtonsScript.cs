@@ -9,6 +9,8 @@ public class ARButtonsScript : MonoBehaviour
     [SerializeField]
     private GameObject bricksButton, bricksList, stepDownButton, stepUpButton, scrollContainer;
     [SerializeField]
+    private ScrollRect scrollRect;
+    [SerializeField]
     private TextMeshProUGUI stepCountText;
     [SerializeField]
     private Slider stepCountBar;
@@ -47,8 +49,6 @@ public class ARButtonsScript : MonoBehaviour
 
         Camera renderCamera = new GameObject("RenderCamera").AddComponent<Camera>();
 
-        scrollContainer.transform.localScale = new Vector3(scrollContainer.transform.localScale.x, numberOfEachBricks.Count * 180, scrollContainer.transform.localScale.z);
-
         foreach (KeyValuePair<string, int> kvp in numberOfEachBricks) 
         {
             float scaling = 50f;
@@ -80,7 +80,7 @@ public class ARButtonsScript : MonoBehaviour
 
             GameObject preview = Instantiate(brickCountPrefab, scrollContainer.transform);
             preview.name = $"Sprite of {kvp.Key}";
-            //preview.transform.localScale = Vector3.one * 0.4f;
+            preview.transform.localScale = Vector3.one * 0.4f;
             //preview.transform.localPosition = new Vector3(-30f, 1f * (--step * 180) + 230, 0f);
 
             TextMeshProUGUI text = preview.GetComponentInChildren<TextMeshProUGUI>();
