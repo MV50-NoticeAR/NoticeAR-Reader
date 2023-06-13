@@ -45,7 +45,7 @@ public class ModelDisplay : MonoBehaviour
                 {
                     foreach (GameObject piece in piecesPerSteps[value + 1])
                     {
-                        piece.SetActive(false); // TODO: should be properly deleted instead of just hidden
+                        piece.SetActive(false);
                     }
                 }
 
@@ -58,18 +58,31 @@ public class ModelDisplay : MonoBehaviour
             // On incremente le nombre d'etape de 1
             else 
             {
-                foreach (Piece piece in schematicStep.pieces)
+                // On check si l'etape n'a pas deja ete affichee 1 fois
+                if (!piecesPerSteps.ContainsKey(value))
                 {
-                    GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
-                    if (output == null) continue;
+                    foreach (Piece piece in schematicStep.pieces)
+                    {
+                        GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
+                        if (output == null) continue;
 
-                    AddFlashingScript(output);
+                        AddFlashingScript(output);
 
-                    if (!piecesPerSteps.ContainsKey(value)) piecesPerSteps.Add(value, new List<GameObject>());
-                    piecesPerSteps[value].Add(output);
+                        if (!piecesPerSteps.ContainsKey(value)) piecesPerSteps.Add(value, new List<GameObject>());
+                        piecesPerSteps[value].Add(output);
+                    }
+                }
+                // Si c'est le cas on reaffiche les pieces
+                else 
+                {
+                    foreach (GameObject piece in piecesPerSteps[value])
+                    {
+                        piece.SetActive(true);
+                        AddFlashingScript(piece);
+                    }
                 }
 
-                // Si y'avait des pieces avant on enleve le flashing
+                // Si y'avait des pieces dans l'etape d'avant on enleve le flashing
                 if (value - 1 > 0)
                 {
                     foreach (GameObject piece in piecesPerSteps[value - 1])
