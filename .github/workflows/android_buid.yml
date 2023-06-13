@@ -1,0 +1,47 @@
+name: Android Build
+
+on:
+  workflow_dispatch: {}
+  # push:
+  #   branches:
+  #     - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - uses: actions/cache@v2
+        with:
+          path: ./Library
+          key: Library-NoticeAR-Reader-Android
+          restore-keys: |
+            Library-NoticeAR-Reader-
+            Library-
+
+      - name: Set up Unity
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          buildsPath: Builds
+          buildName: Android
+
+      - name: Zip Android Build
+        run: |
+          zip -r AndroidBuild.zip Builds/Android
+          mv AndroidBuild.zip $GITHUB_WORKSPACE
+
+      - name: Publish Android Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Android Build
+          path: AndroidBuild.zip

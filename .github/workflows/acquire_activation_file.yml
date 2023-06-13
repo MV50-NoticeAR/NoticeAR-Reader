@@ -1,6 +1,11 @@
 name: Acquire activation file
+
+# Necessary to build Unity apps
+# doc: https://game.ci/docs/github/activation
+
 on:
   workflow_dispatch: {}
+
 jobs:
   activation:
     name: Request manual activation file 🔑
