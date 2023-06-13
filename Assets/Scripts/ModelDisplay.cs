@@ -169,7 +169,10 @@ public class ModelDisplay : MonoBehaviour
         GameObject piece;
 
         try {
-            piece = Instantiate(resource, pos * scaling, rot, parent.transform);
+            //piece = Instantiate(resource, pos * scaling, rot, parent.transform);
+            piece = Instantiate(resource, parent.transform);
+            piece.transform.localPosition = pos * scaling;
+            piece.transform.localRotation = rot;
         } catch {
             Debug.Log($"Piece {name} not found");
             return null;
