@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class ModelDisplay : MonoBehaviour
 {
+    public ModelDisplay instance = null;
+
     public Camera camAR;
     public Camera camTest;
 
@@ -37,6 +39,8 @@ public class ModelDisplay : MonoBehaviour
             bool decreasing = value < __step;
 
             __step = value;
+            PlayerPrefs.SetInt(CONSTANTS.PLAYER_PREF_STEP_KEY, value);
+
             Step schematicStep = schema.steps[Step - 1];
 
             // On retourne en arriere
@@ -107,9 +111,7 @@ public class ModelDisplay : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-
-        schema = JsonLoader.FetchSchematic("final.json");
+        schema = JsonLoader.FetchSchematic(PlayerPrefs.GetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY));
         StepMax = schema.steps.Count;
 
         BuildListOfBricks();
@@ -119,7 +121,16 @@ public class ModelDisplay : MonoBehaviour
             numberOfBricks += schema.steps[i].pieces.Count;
         }
 
-        NextStep();
+        int savedStep = PlayerPrefs.GetInt(CONSTANTS.PLAYER_PREF_STEP_KEY);
+        if (savedStep > 1 && savedStep <= StepMax) {
+            for (int i = 1; i <= savedStep; i++)
+            {
+                Debug.Log($"Rebuilding step {i}/{savedStep}");
+                NextStep();
+            }
+        }
+
+        else NextStep();
     }
 
     private void BuildListOfBricks()

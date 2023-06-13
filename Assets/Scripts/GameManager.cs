@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
         private set 
         {
             __currentPage = value;
-            if (CONSTANTS.DEBUG) Debug.Log($"Current page {CurrentPage}");
 
             // Fleche gauche
             if (value == 0) leftButton.SetActive(false);
@@ -56,10 +55,16 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null) instance = this;
-        else if (instance != this) Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            // If an instance already exists, destroy this GameManager
+            Destroy(gameObject);
+        }
         
         // On recupere toutes les notices du dossier
         schemas = JsonLoader.FetchAllSchematics();
@@ -94,8 +99,6 @@ public class GameManager : MonoBehaviour
             sign = sign == 1f ? -1f : 1f;
         }
 
-        // if (CONSTANTS.DEBUG) Debug.Log($"{CurrentPage}, {maxSchematicsPerPage}");
-
         int c = 0;          // colone en cours
         int r = 0;          // ligne en cours
         int processed = 0;  // notice en cours
@@ -115,7 +118,6 @@ public class GameManager : MonoBehaviour
                 c = 0;
             }
 
-            // if (CONSTANTS.DEBUG) Debug.Log($"{i}, {c}, {r}");
             Schematic schema = schemas[i];
 
             // On cree le bouton associe a la notice

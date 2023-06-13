@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 public class ToAssembleButtonScript : MonoBehaviour
 {
     [SerializeField]
-    private string NOTICE_PLAYERPREF = "NoticeName";
-    [SerializeField]
     private string AR_SCENE = "MainScene";
 
     public string ButtonFile = null;
@@ -22,7 +20,10 @@ public class ToAssembleButtonScript : MonoBehaviour
 
     private void SetNotice(string value)
     {
-        PlayerPrefs.SetString(NOTICE_PLAYERPREF, value);
+        if (PlayerPrefs.GetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY) != value)
+            PlayerPrefs.SetInt(CONSTANTS.PLAYER_PREF_STEP_KEY, 1);
+
+        PlayerPrefs.SetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY, value);
     }
 
     IEnumerator LoadSceneRoutine(string sceneName)

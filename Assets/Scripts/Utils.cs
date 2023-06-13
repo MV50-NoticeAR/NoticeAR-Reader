@@ -7,6 +7,8 @@ using UnityEngine;
 public struct CONSTANTS
 {
     public const bool DEBUG = true;
+    public const string PLAYER_PREF_SCHEMATIC_KEY = "SchematicName";
+    public const string PLAYER_PREF_STEP_KEY = "StepIndex";
 }
 
 /// <summary>

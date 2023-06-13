@@ -8,14 +8,12 @@ public class BackToARScript : MonoBehaviour
     [SerializeField]
     private GameObject layout;
     [SerializeField]
-    private string NOTICE_PLAYERPREF = null;
-    [SerializeField]
     private string AR_SCENE = "MainScene";
 
     public void BackToAR()
     {
         // already went to the AR scene else select a default notice
-        if (PlayerPrefs.HasKey(NOTICE_PLAYERPREF)) ChangeSceneToAR();
+        if (PlayerPrefs.HasKey(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY)) ChangeSceneToAR();
         else
         {
             ToAssembleButtonScript script = layout.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ToAssembleButtonScript>();
@@ -28,13 +26,16 @@ public class BackToARScript : MonoBehaviour
 
     private void ChangeSceneToAR()
     {
-        SetNotice(PlayerPrefs.GetString(NOTICE_PLAYERPREF));
+        SetNotice(PlayerPrefs.GetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY));
         StartCoroutine(LoadSceneRoutine(AR_SCENE));
     }
 
-    private void SetNotice(string Value)
+    private void SetNotice(string value)
     {
-        PlayerPrefs.SetString(NOTICE_PLAYERPREF, Value);
+        if (PlayerPrefs.GetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY) != value)
+            PlayerPrefs.SetInt(CONSTANTS.PLAYER_PREF_STEP_KEY, 1);
+
+        PlayerPrefs.SetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY, value);
     }
 
     IEnumerator LoadSceneRoutine(string sceneName)

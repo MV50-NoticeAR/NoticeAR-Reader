@@ -42,7 +42,10 @@ public class FlashingMaterialScript : MonoBehaviour
     public void RemoveScript()
     {
         color.a = 1f;
-        _renderer.material.color = color;
+        try {
+            _renderer.material.color = color;
+        } catch {}
+        
         Destroy(this);
     }
 }
