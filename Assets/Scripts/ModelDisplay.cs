@@ -101,8 +101,8 @@ public class ModelDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        camAR.enabled = false;
-        camTest.enabled = true;
+        camAR.enabled = true;
+        camTest.enabled = false;
     }
 
     void Awake()
