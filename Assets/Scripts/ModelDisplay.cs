@@ -7,6 +7,7 @@ public class ModelDisplay : MonoBehaviour
 
     public Camera camAR;
     public Camera camTest;
+    public GameObject bricksList;
 
     public GameObject par;
     public float scaling = 0.001f;
@@ -96,6 +97,9 @@ public class ModelDisplay : MonoBehaviour
                     }
                 }
             }
+            BuildListOfBricks(value);
+
+
         }
     }
 
@@ -114,8 +118,6 @@ public class ModelDisplay : MonoBehaviour
         schema = JsonLoader.FetchSchematic(PlayerPrefs.GetString(CONSTANTS.PLAYER_PREF_SCHEMATIC_KEY));
         StepMax = schema.steps.Count;
 
-        BuildListOfBricks();
-
         for (int i = 0; i < StepMax; i++)
         {
             numberOfBricks += schema.steps[i].pieces.Count;
@@ -133,21 +135,21 @@ public class ModelDisplay : MonoBehaviour
         else NextStep();
     }
 
-    private void BuildListOfBricks()
+    private void BuildListOfBricks(int step)
     {
-        foreach (Step step in schema.steps)
+        numberOfEachBricks.Clear();
+        foreach (GameObject brick in piecesPerSteps[step])
         {
-            foreach (Piece piece in step.pieces)
+            string shortName = brick.name.Replace("(Clone)", "");
+            if (!numberOfEachBricks.ContainsKey(shortName))
             {
-                if (!numberOfEachBricks.ContainsKey(piece.model))
-                {
-                    numberOfEachBricks.Add(piece.model, 1);
-                }
-                else
-                {
-                    numberOfEachBricks[piece.model]++;
-                }
+                numberOfEachBricks.Add(shortName, 1);
             }
+            else
+            {
+                numberOfEachBricks[shortName]++;
+            }
+            
         }
     }
 

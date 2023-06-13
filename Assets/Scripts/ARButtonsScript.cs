@@ -45,9 +45,10 @@ public class ARButtonsScript : MonoBehaviour
     {
         // Recupere le nombre de chaque briques
         Dictionary<string, int> numberOfEachBricks = DisplayModel.GetComponent<ModelDisplay>().GetNumberOfEachBricks();
-        int step = 0;
 
         Camera renderCamera = new GameObject("RenderCamera").AddComponent<Camera>();
+
+        scrollContainer.transform.ClearChildren();
 
         foreach (KeyValuePair<string, int> kvp in numberOfEachBricks) 
         {
@@ -99,6 +100,8 @@ public class ARButtonsScript : MonoBehaviour
 
     public void UpdateSteps()
     {
+        LoadBrickList();
+
         int currentStep = DisplayModel.GetComponent<ModelDisplay>().Step;
         int maxStep = DisplayModel.GetComponent<ModelDisplay>().StepMax;
 

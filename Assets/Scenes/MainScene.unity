@@ -2186,6 +2186,7 @@ MonoBehaviour:
   instance: {fileID: 1675479159}
   camAR: {fileID: 22732920}
   camTest: {fileID: 1897221447}
+  bricksList: {fileID: 1588120623}
   par: {fileID: 1912184486}
   scaling: 0.001
   transparentMat: {fileID: 2100000, guid: 52619f1095c551d4d97a1894d83ec3d0, type: 2}
