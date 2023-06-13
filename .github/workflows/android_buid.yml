@@ -38,7 +38,6 @@ jobs:
       - name: Zip Android Build
         run: |
           zip -r AndroidBuild.zip Builds/Android
-          mv AndroidBuild.zip $GITHUB_WORKSPACE
 
       - name: Publish Android Artifact
         uses: actions/upload-artifact@v2

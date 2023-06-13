@@ -38,7 +38,6 @@ jobs:
       - name: Zip iOS Build
         run: |
           zip -r iOSBuild.zip Builds/iOS
-          mv iOSBuild.zip $GITHUB_WORKSPACE
 
       - name: Publish iOS Artifact
         uses: actions/upload-artifact@v2
