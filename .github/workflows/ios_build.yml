@@ -19,7 +19,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ./Library
-          key: Library-NoticeAR-Reader-Android
+          key: Library-NoticeAR-Reader-iOS
           restore-keys: |
             Library-NoticeAR-Reader-
             Library-
@@ -31,17 +31,17 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: Android
+          targetPlatform: iOS
           buildsPath: Builds
-          buildName: Android
+          buildName: iOS
 
-      - name: Zip Android Build
+      - name: Zip iOS Build
         run: |
-          zip -r AndroidBuild.zip Builds/Android
-          mv AndroidBuild.zip $GITHUB_WORKSPACE
+          zip -r iOSBuild.zip Builds/iOS
+          mv iOSBuild.zip $GITHUB_WORKSPACE
 
-      - name: Publish Android Artifact
+      - name: Publish iOS Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Android Build
-          path: AndroidBuild.zip
+          name: iOS Build
+          path: iOSBuild.zip
