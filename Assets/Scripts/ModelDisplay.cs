@@ -9,7 +9,7 @@ public class ModelDisplay : MonoBehaviour
     public Camera camTest;
     public GameObject bricksList;
 
-    public GameObject par;
+    public GameObject parent;
     public float scaling = 0.001f;
 
     public Material transparentMat;
@@ -169,7 +169,7 @@ public class ModelDisplay : MonoBehaviour
         GameObject piece;
 
         try {
-            piece = Instantiate(resource, pos * scaling, rot, par.transform);
+            piece = Instantiate(resource, pos * scaling, rot, parent.transform);
         } catch {
             Debug.Log($"Piece {name} not found");
             return null;
