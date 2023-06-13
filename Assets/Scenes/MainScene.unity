@@ -2094,7 +2094,6 @@ MonoBehaviour:
   camAR: {fileID: 22732920}
   camTest: {fileID: 1897221447}
   par: {fileID: 1912184486}
-  scaling: 1
   transparentMat: {fileID: 2100000, guid: 52619f1095c551d4d97a1894d83ec3d0, type: 2}
   baseMat: {fileID: 2100000, guid: a06fa190d690e4685af3708d966e0618, type: 2}
 --- !u!1 &1707975697
@@ -2250,7 +2249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897221445}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1.417}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
