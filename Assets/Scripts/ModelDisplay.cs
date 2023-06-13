@@ -14,7 +14,8 @@ public class ModelDisplay : MonoBehaviour
 
     private Schematic schema;
     private Dictionary<int, List<GameObject>> piecesPerSteps = new();
-    
+    private Dictionary<string, int> numberOfEachBricks = new();    
+
     private int numberOfBricks = 0;
 
     private int __stepMax = 0;
@@ -111,6 +112,8 @@ public class ModelDisplay : MonoBehaviour
         schema = JsonLoader.FetchSchematic("final.json");
         StepMax = schema.steps.Count;
 
+        BuildListOfBricks();
+
         for (int i = 0; i < StepMax; i++)
         {
             numberOfBricks += schema.steps[i].pieces.Count;
@@ -118,6 +121,26 @@ public class ModelDisplay : MonoBehaviour
 
         NextStep();
     }
+
+    private void BuildListOfBricks()
+    {
+        foreach (Step step in schema.steps)
+        {
+            foreach (Piece piece in step.pieces)
+            {
+                if (!numberOfEachBricks.ContainsKey(piece.model))
+                {
+                    numberOfEachBricks.Add(piece.model, 1);
+                }
+                else
+                {
+                    numberOfEachBricks[piece.model]++;
+                }
+            }
+        }
+    }
+
+    public Dictionary<string, int> GetNumberOfEachBricks() => numberOfEachBricks;
 
     /// <summary>
     /// Affiche la piece donnee sur la scene
@@ -149,6 +172,10 @@ public class ModelDisplay : MonoBehaviour
         return piece;
     }
 
+    /// <summary>
+    /// Ajoute le script de flashing sur le GameObject donnee
+    /// </summary>
+    /// <param name="piece">Le GameObject concerne</param>
     private void AddFlashingScript(GameObject piece)
     {
         // change the material transparent for flashing 
@@ -156,6 +183,10 @@ public class ModelDisplay : MonoBehaviour
         piece.AddComponent<FlashingMaterialScript>();
     }
 
+    /// <summary>
+    /// Enleve proprement le script de flashing sur le GameObject donnee
+    /// </summary>
+    /// <param name="piece">Le GameObject concerne</param>
     private void RemoveFlashingScript(GameObject piece)
     {
         piece.GetComponent<FlashingMaterialScript>().RemoveScript();

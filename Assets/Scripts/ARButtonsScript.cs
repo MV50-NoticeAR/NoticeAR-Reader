@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -16,6 +16,7 @@ public class ARButtonsScript : MonoBehaviour
     private string MENU_SCENE = "MenuScene";
 
     public GameObject DisplayModel;
+    public GameObject brickCountPrefab;
 
     private bool brickListDisplay, stepProgressDisplay;
 
@@ -23,7 +24,10 @@ public class ARButtonsScript : MonoBehaviour
     {
         brickListDisplay = true;
         stepProgressDisplay = true;
+
         ChangeBrickListDisplay();
+        LoadBrickList();
+
         stepCountBar.maxValue = DisplayModel.GetComponent<ModelDisplay>().StepMax;
         UpdateSteps();
     }
@@ -31,15 +35,61 @@ public class ARButtonsScript : MonoBehaviour
     public void ChangeBrickListDisplay()
     {
         brickListDisplay = !brickListDisplay;
-        if (brickListDisplay)
+        bricksList.SetActive(brickListDisplay);
+        bricksButton.SetActive(!brickListDisplay);
+    }
+
+    public void LoadBrickList()
+    {
+        // Recupere le nombre de chaque briques
+        Dictionary<string, int> numberOfEachBricks = DisplayModel.GetComponent<ModelDisplay>().GetNumberOfEachBricks();
+        int step = 0;
+
+        foreach (KeyValuePair<string, int> kvp in numberOfEachBricks) 
         {
-            bricksList.SetActive(true);
-            bricksButton.SetActive(false);
-        }
-        else
-        {
-            bricksList.SetActive(false);
-            bricksButton.SetActive(true);
+            float scaling = 50f;
+            GameObject brick = Instantiate(Resources.Load<GameObject>(@$"Bricks/{kvp.Key}"), transform);
+            brick.transform.localPosition = Vector3.zero;
+            brick.transform.localScale = new Vector3(scaling, scaling, scaling);
+            brick.transform.localRotation = Quaternion.Euler(-30, -30, 0);
+
+            // Cree une camera pour le rendu des briques
+            Camera renderCamera = new GameObject("RenderCamera").AddComponent<Camera>();
+            renderCamera.transform.position = brick.transform.position - Vector3.forward * 3f;
+            renderCamera.orthographic = true;
+            renderCamera.orthographicSize = 3f;
+            renderCamera.clearFlags = CameraClearFlags.Color;
+
+            // Create a RenderTexture to capture the model's render
+            RenderTexture renderTexture = new RenderTexture(512, 512, 24);
+            renderCamera.targetTexture = renderTexture;
+
+            // Render the model to the RenderTexture
+            renderCamera.Render();
+
+            // Create a new sprite from the RenderTexture
+            Texture2D texture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
+            RenderTexture.active = renderTexture;
+            texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+            texture.Apply();
+
+            Sprite previewSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one);
+
+            GameObject preview = Instantiate(brickCountPrefab, bricksList.transform);
+            preview.name = $"Sprite of {kvp.Key}";
+            preview.transform.localScale = Vector3.one * 0.4f;
+            preview.transform.localPosition = new Vector3(-30f, 1f * (--step * 180) + 230, 0f);
+
+            TextMeshProUGUI text = preview.GetComponentInChildren<TextMeshProUGUI>();
+            text.SetText($"🧩 {kvp.Key}\n   × {kvp.Value}");
+
+            Image imageComp = preview.transform.Find("Image").GetComponent<Image>();
+            imageComp.sprite = previewSprite;
+
+            Destroy(renderTexture);
+            Destroy(renderCamera);
+            brick.SetActive(false);
+            Destroy(brick);
         }
     }
 
@@ -77,7 +127,7 @@ public class ARButtonsScript : MonoBehaviour
         StartCoroutine(LoadSceneRoutine(MENU_SCENE));
     }
 
-    IEnumerator LoadSceneRoutine(string sceneName)
+    System.Collections.IEnumerator LoadSceneRoutine(string sceneName)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
 
