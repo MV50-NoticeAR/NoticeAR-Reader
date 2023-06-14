@@ -160,16 +160,17 @@ public class ModelDisplay : MonoBehaviour
         GameObject piece;
 
         try {
-            piece = Instantiate(resource, parent.transform);
-            piece.transform.localPosition = pos * scaling;
-            piece.transform.localRotation = rot;
+
+            piece = Instantiate(resource);
+            // Scaling the piece
+            piece.transform.localScale = new Vector3(-scaling, scaling, scaling); // Handle left handed axis
+            piece.transform.rotation = rot;
+            piece.transform.position = pos * scaling;
+            piece.transform.SetParent(parent.transform);
         } catch {
             Debug.Log($"Piece {name} not found");
             return null;
         }
-        
-        // Scaling the piece
-        piece.transform.localScale = new Vector3(scaling, scaling, scaling);
 
         // Ajout du script pour pouvoir faire clignoter la piece
         FlashingMaterialScript script = piece.AddComponent<FlashingMaterialScript>();
