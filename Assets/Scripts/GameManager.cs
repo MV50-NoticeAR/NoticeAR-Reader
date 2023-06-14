@@ -27,11 +27,11 @@ public class GameManager : MonoBehaviour
 
             // Fleche gauche
             if (value == 0) leftButton.SetActive(false);
-            if (value == 1) leftButton.SetActive(true);
+            else leftButton.SetActive(true);
 
             // Fleche droite
-            if (CurrentPage == schemas.Count / maxSchematicsPerPage) rightButton.SetActive(false);
-            if (CurrentPage == (schemas.Count / maxSchematicsPerPage) - 1) rightButton.SetActive(true);
+            if (CurrentPage == schemas.Count / maxSchematicsPerPage - 1) rightButton.SetActive(false);
+            else rightButton.SetActive(true);
 
             // On actualise le display
             ShowSchemasInGUI();
@@ -41,43 +41,23 @@ public class GameManager : MonoBehaviour
     public void PageUp() => CurrentPage++;
     public void PageDown() => CurrentPage--;
 
-    void Start()
-    {
-        // On check qu'on a bien tous les elements necessaires associes via Unity
-        if (verticalLayout == null) throw new Exception("The layout has not been associated into the script !");
-        if (noticeButtonPrefab == null) throw new Exception("Button prefab has not been associated into the script !");
-        if (leftButton == null) throw new Exception("The left arrow has not been associated into the script !");
-        if (rightButton == null) throw new Exception("The right arrow has not been associated into the script !");
-
-        // On cache la fleche gauche sur la premiere page
-        leftButton.SetActive(false);
-    }
-
     void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            // If an instance already exists, destroy this GameManager
-            Destroy(gameObject);
-        }
-        
+    {        
         // On recupere toutes les notices du dossier
         schemas = JsonLoader.FetchAllSchematics();
         if (CONSTANTS.DEBUG == true) Debug.Log($"All schemas loaded ! {schemas.Count} schemas loaded");
 
         // On actualise le display
         ShowSchemasInGUI();
+
+        // On cache la fleche gauche sur la premiere page
+        leftButton.SetActive(false);
     }
 
-    /// <sumary>
+    /// <summary>
     /// Affiche les boutons pour lancer la construction d'une notice en fonction de la page
     /// et des notices disponibles
-    /// </sumary>
+    /// </summary>
     void ShowSchemasInGUI()
     {
         // On enleve l'affichage precedent
