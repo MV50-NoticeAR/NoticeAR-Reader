@@ -113,8 +113,11 @@ public class GameManager : MonoBehaviour
             textMesh.text = $" {schema.name} (v{schema.version})\n🧩 {schema.description}\n👤 {schema.author}";
 
             // On update l'image du bouton (en fonction de celle parametree dans le JSON)
-            Image imageComp = button.transform.Find("Image").GetComponent<Image>();
-            imageComp.sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture.Replace(".png", "")}");
+            if (schema.picture != null)
+            {
+                Image imageComp = button.transform.Find("Image").GetComponent<Image>();
+                imageComp.sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture.Replace(".png", "")}");
+            }
 
             c++;
             processed++;
