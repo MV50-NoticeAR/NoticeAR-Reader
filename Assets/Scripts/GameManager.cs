@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
             else leftButton.SetActive(true);
 
             // Fleche droite
-            if (CurrentPage == schemas.Count / maxSchematicsPerPage - 1) rightButton.SetActive(false);
+            if (CurrentPage == schemas.Count / maxSchematicsPerPage - 1 || schemas.Count < maxSchematicsPerPage) rightButton.SetActive(false);
             else rightButton.SetActive(true);
 
             // On actualise le display
@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
 
         // On cache la fleche gauche sur la premiere page
         leftButton.SetActive(false);
+
+        if (schemas.Count < maxSchematicsPerPage) rightButton.SetActive(false);
     }
 
     /// <summary>
