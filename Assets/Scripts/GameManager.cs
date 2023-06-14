@@ -116,7 +116,8 @@ public class GameManager : MonoBehaviour
             if (schema.picture != null)
             {
                 Image imageComp = button.transform.Find("Image").GetComponent<Image>();
-                imageComp.sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture.Replace(".png", "")}");
+                Sprite sprite = Resources.Load<Sprite>(@$"Pictures/{schema.picture.Replace(".png", "")}");
+                if (sprite != null) imageComp.sprite = sprite;
             }
 
             c++;
