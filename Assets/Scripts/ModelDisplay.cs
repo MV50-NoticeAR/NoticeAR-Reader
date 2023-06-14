@@ -57,7 +57,7 @@ public class ModelDisplay : MonoBehaviour
 
                 foreach (GameObject piece in piecesPerSteps[value])
                 {
-                    SetFlashing(piece, true);
+                    SetFlashing(piece, value > 1);
                 }
             }
 
@@ -82,7 +82,7 @@ public class ModelDisplay : MonoBehaviour
                     foreach (GameObject piece in piecesPerSteps[value])
                     {
                         piece.SetActive(true);
-                        SetFlashing(piece, true);
+                        SetFlashing(piece, value > 1);
                     }
                 }
 
@@ -138,15 +138,9 @@ public class ModelDisplay : MonoBehaviour
         foreach (GameObject brick in piecesPerSteps[step])
         {
             string shortName = brick.name.Replace("(Clone)", "");
-            if (!numberOfEachBricks.ContainsKey(shortName))
-            {
-                numberOfEachBricks.Add(shortName, 1);
-            }
-            else
-            {
-                numberOfEachBricks[shortName]++;
-            }
             
+            if (!numberOfEachBricks.ContainsKey(shortName)) numberOfEachBricks.Add(shortName, 1);
+            else numberOfEachBricks[shortName]++;
         }
     }
 
@@ -188,7 +182,7 @@ public class ModelDisplay : MonoBehaviour
             script.baseColor = customColor;
         }
 
-        SetFlashing(piece, true);
+        SetFlashing(piece, Step > 1);
 
         return piece;
     }
@@ -196,6 +190,8 @@ public class ModelDisplay : MonoBehaviour
     private void SetFlashing(GameObject piece, bool flashing)
     {
         FlashingMaterialScript script = piece.GetComponent<FlashingMaterialScript>();
+
+        Debug.Log($"SetFlashing {piece.name} to {flashing}");
 
         if (flashing) script.Play();
         else script.Pause();
