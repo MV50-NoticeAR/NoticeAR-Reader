@@ -57,7 +57,7 @@ public class ModelDisplay : MonoBehaviour
 
                 foreach (GameObject piece in piecesPerSteps[value])
                 {
-                    AddFlashingScript(piece);
+                    SetFlashing(piece, true);
                 }
             }
 
@@ -72,8 +72,6 @@ public class ModelDisplay : MonoBehaviour
                         GameObject output = Display(piece.model, piece.position, piece.rotation, piece.color);
                         if (output == null) continue;
 
-                        AddFlashingScript(output);
-
                         if (!piecesPerSteps.ContainsKey(value)) piecesPerSteps.Add(value, new List<GameObject>());
                         piecesPerSteps[value].Add(output);
                     }
@@ -84,7 +82,7 @@ public class ModelDisplay : MonoBehaviour
                     foreach (GameObject piece in piecesPerSteps[value])
                     {
                         piece.SetActive(true);
-                        AddFlashingScript(piece);
+                        SetFlashing(piece, true);
                     }
                 }
 
@@ -93,13 +91,12 @@ public class ModelDisplay : MonoBehaviour
                 {
                     foreach (GameObject piece in piecesPerSteps[value - 1])
                     {
-                        RemoveFlashingScript(piece);
+                        SetFlashing(piece, false);
                     }
                 }
             }
+            
             BuildListOfBricks(value);
-
-
         }
     }
 
@@ -169,7 +166,6 @@ public class ModelDisplay : MonoBehaviour
         GameObject piece;
 
         try {
-            //piece = Instantiate(resource, pos * scaling, rot, parent.transform);
             piece = Instantiate(resource, parent.transform);
             piece.transform.localPosition = pos * scaling;
             piece.transform.localRotation = rot;
@@ -181,31 +177,27 @@ public class ModelDisplay : MonoBehaviour
         // Scaling the piece
         piece.transform.localScale = new Vector3(scaling, scaling, scaling);
 
+        // Ajout du script pour pouvoir faire clignoter la piece
+        FlashingMaterialScript script = piece.AddComponent<FlashingMaterialScript>();
+        script.transparentMat = transparentMat;
+
         // Changing the color
-        if (ColorUtility.TryParseHtmlString(hexColor, out Color customColor)) 
+        if (ColorUtility.TryParseHtmlString(hexColor.StartsWith("#") ? hexColor : $"#{hexColor}", out Color customColor))
+        {
             piece.GetComponentInChildren<Renderer>().material.color = customColor;
+            script.baseColor = customColor;
+        }
+
+        SetFlashing(piece, true);
 
         return piece;
     }
 
-    /// <summary>
-    /// Ajoute le script de flashing sur le GameObject donnee
-    /// </summary>
-    /// <param name="piece">Le GameObject concerne</param>
-    private void AddFlashingScript(GameObject piece)
+    private void SetFlashing(GameObject piece, bool flashing)
     {
-        // change the material transparent for flashing 
-        piece.GetComponentInChildren<Renderer>().material = transparentMat;
-        piece.AddComponent<FlashingMaterialScript>();
-    }
+        FlashingMaterialScript script = piece.GetComponent<FlashingMaterialScript>();
 
-    /// <summary>
-    /// Enleve proprement le script de flashing sur le GameObject donnee
-    /// </summary>
-    /// <param name="piece">Le GameObject concerne</param>
-    private void RemoveFlashingScript(GameObject piece)
-    {
-        piece.GetComponent<FlashingMaterialScript>().RemoveScript();
-        piece.GetComponentInChildren<Renderer>().material = baseMat;
+        if (flashing) script.Play();
+        else script.Pause();
     }
 }

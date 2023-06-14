@@ -5,47 +5,67 @@ using UnityEngine;
 public class FlashingMaterialScript : MonoBehaviour
 {
     public float fadeSpeed = 0.5f;
-    private bool increasing;
-    
+    private bool increasing = false;
+
     [SerializeField]
     private MeshRenderer _renderer;
 
-    [SerializeField]
-    private Color color;
+    public Material transparentMat;
+    public Material baseMat;
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    public Color baseColor;
+
+    private bool _playing;
+    private bool Playing
     {
-        //getchild because of the hierarchy of the created gameobject in modeldisplay>display
-       _renderer = this.transform.GetChild(0).GetComponent<MeshRenderer>();
-        color = _renderer.material.color;
-       increasing = false;
+        get => _playing;
+        set
+        {
+            if (_renderer == null)
+            {
+                _renderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+                baseMat = _renderer.material;
+            }
+
+            _playing = value;
+
+            if (value)
+            {
+                _renderer.material = transparentMat;
+                _renderer.material.color = baseColor;
+            }
+
+            else
+            {
+                baseColor.a = 1f;
+                _renderer.material = baseMat;
+                _renderer.material.color = baseColor;
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!Playing) return;
+
         if (increasing)
         {
-           color.a += Time.deltaTime * fadeSpeed;
+            baseColor.a += Time.deltaTime * fadeSpeed;
         }
         else
         {
-            color.a -= Time.deltaTime * fadeSpeed;
+            baseColor.a -= Time.deltaTime * fadeSpeed;
         }
-        _renderer.material.color = color;
 
-        if (color.a <= 0) increasing = true;
-        if (color.a >= 1) increasing = false;
+        _renderer.material.color = baseColor;
+
+        if (baseColor.a <= 0) increasing = true;
+        if (baseColor.a >= 1) increasing = false;
     }
 
-    public void RemoveScript()
-    {
-        color.a = 1f;
-        try {
-            _renderer.material.color = color;
-        } catch {}
-        
-        Destroy(this);
-    }
+    public void Play() => Playing = true;
+
+    public void Pause() => Playing = false;
 }
